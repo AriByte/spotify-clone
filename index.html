@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify - Web Player: Music for everyone</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Fonts: Montserrat for that geometric Spotify look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+        
+    <style>
+        /* Custom Colors & Global Resets */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; /* Updated this line */
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        /* Top Navbar Custom Styles */
+        .spotify-navbar {
+            background-color: #000000;
+            padding: 2px 10px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+        }
+        .search-box-container {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+            
+            display: flex;
+            align-items: center;
+        }
+        .search-box-container i.bi-search {
+            position: absolute;
+            left: 16px;
+            color: #b3b3b3;
+            font-size: 1.3rem; /* Larger search icon */
+            vertical-align: middle;
+        }
+        .search-box-container i.bi-briefcase {
+            position: absolute;
+            right: 16px;
+            color: #b3b3b3;
+            font-size: 1.3rem; /* Larger browse icon matching the image */
+            border-left: 1px solid #3e3e3e;
+            padding-left: 14px;
+        }
+        .search-input {
+            background-color: #1f1f1f;
+            border: none;
+            border-radius: 50px;
+            color: #ffffff;
+            padding: 14px 55px 14px 50px;
+            width: 100%;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+        .search-input::placeholder {
+            color: #b3b3b3;
+            opacity: 1;
+        }
+        .search-input:hover{
+            background-color: #2a2a2a;
+        }
+        .search-input:focus {
+            background-color: #2a2a2a;
+            box-shadow: 0 0 0 2px #ffffff;
+            outline: none;
+            color: #ffffff;
+        }
+        .nav-link-custom {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 20px;
+        }
+        .nav-link-custom:hover {
+            color: #ffffff;
+        }
+        .btn-signup {
+            background: transparent;
+            color: #b3b3b3;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 24px;
+        }
+        .btn-signup:hover {
+            color: #ffffff;
+            transform: scale(1.04);
+        }
+        .btn-login {
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 50px;
+            padding: 8px 32px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+        }
+        .btn-login:hover {
+            transform: scale(1.04);
+            background-color: #f6f6f6;
+        }
+
+        /* Layout Structure */
+        .main-wrapper {
+            height: calc(100vh - 134px); /* 100vh minus navbar and bottom preview footer */
+            display: flex;
+            padding: 0 8px;
+            gap: 8px;
+        }
+
+        /* Sidebar Custom Styles */
+        .sidebar {
+            width: 360px;
+            background-color: #121212;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+        }
+        .sidebar-card {
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .sidebar-card h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .sidebar-card p {
+            font-size: 0.85rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .btn-sidebar-action {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .btn-sidebar-action:hover {
+            transform: scale(1.04);
+        }
+        .sidebar-footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .sidebar-footer-links a {
+            color: #b3b3b3;
+            font-size: 0.7rem;
+            text-decoration: none;
+        }
+        .sidebar-footer-links a:hover {
+            text-decoration: underline;
+        }
+        .btn-lang {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid #727272;
+            border-radius: 50px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            width: fit-content;
+        }
+        .btn-lang:hover {
+            border-color: #ffffff;
+            transform: scale(1.04);
+        }
+
+        /* Main Content Display Space */
+        .content-section {
+            flex: 1;
+            background-color: #121212;
+            border-radius: 8px;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        /* Custom scrollbar for main content */
+        .content-section::-webkit-scrollbar {
+            width: 8px;
+        }
+        .content-section::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Media Cards Custom Design */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .section-header a {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .section-header a:hover {
+            text-decoration: underline;
+        }
+        .spotify-card {
+            background-color: #181818;
+            padding: 16px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        .spotify-card:hover {
+            background-color: #282828;
+        }
+        .spotify-card img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+        .spotify-card img.artist-img {
+            border-radius: 50%;
+        }
+        .spotify-card h6 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .spotify-card p {
+            font-size: 0.8rem;
+            color: #b3b3b3;
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Gradient Charts Section Grid */
+        .chart-card {
+            padding: 16px;
+            border-radius: 6px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        .chart-card span.badge-tag {
+            background-color: #ffffff;
+            color: #000000;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+        .chart-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        /* Footer Info Links Grid */
+        .footer-nav {
+            margin-top: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #292929;
+        }
+        .footer-nav h6 {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        .footer-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-nav ul li {
+            margin-bottom: 12px;
+        }
+        .footer-nav ul li a {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .footer-nav ul li a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        .social-icons a {
+            color: #ffffff;
+            background-color: #292929;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: 12px;
+            text-decoration: none;
+        }
+        .social-icons a:hover {
+            background-color: #727272;
+        }
+        .copyright-bar {
+            padding: 24px 0;
+            color: #b3b3b3;
+            font-size: 0.85rem;
+        }
+
+        /* Persistent Logged-Out Callout Banner */
+        .preview-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #af2896, #509bf5);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            height: 70px;
+        }
+        .preview-banner p {
+            margin: 0;
+            color: #ffffff;
+        }
+        .btn-banner-signup {
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 50px;
+            padding: 10px 32px;
+            font-weight: 700;
+            border: none;
+            font-size: 0.95rem;
+        }
+        .btn-banner-signup:hover {
+            transform: scale(1.04);
+        }
+
+        /* Responsive Breakpoints Modifications */
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none; /* Hide sidebar on small/medium displays */
+            }
+            .search-box-container {
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Navbar Header Section -->
+    <nav class="spotify-navbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center flex-grow-1">
+            <!-- Spotify Logo icon -->
+            <a href="#" class="me-3 text-white">
+                <i class="bi bi-spotify" style="font-size: 2rem;"></i>
+            </a>
+            <!-- Home pill icon -->
+            <a href="#" class="btn btn-dark rounded-circle me-3 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #1f1f1f;">
+                <i class="bi bi-house-door-fill text-white" style="font-size: 1.2rem;"></i>
+            </a>
+            <!-- Complete Center Navigation Search Input Field -->
+            <div class="search-box-container d-none d-md-block">
+                <i class="bi bi-search"></i>
+                <input type="text" class="search-input" placeholder="What do you want to play?">
+                <i class="bi bi-briefcase"></i>
+            </div>
+        </div>
+
+        <!-- Right Hand Top Controls Section -->
+        <div class="d-flex align-items-center">
+            <div class="d-none d-lg-flex align-items-center">
+                <a href="#" class="nav-link-custom">Premium</a>
+                <a href="#" class="nav-link-custom">Support</a>
+                <a href="#" class="nav-link-custom">Download</a>
+                <div style="width: 1px; height: 16px; background-color: #535353; margin-right: 20px;"></div>
+                <a href="#" class="nav-link-custom d-flex align-items-center gap-1">
+                    <i class="bi bi-arrow-down-circle"></i> Install App
+                </a>
+            </div>
+            <button class="btn-signup">Sign up</button>
+            <button class="btn-login">Log in</button>
+        </div>
+    </nav>
+
+    <!-- Content Workspace Grid Setup -->
+    <div class="main-wrapper">
+        
+        <!-- Left Sidebar Section Component -->
+        <aside class="sidebar">
+            <div>
+                <!-- Top Library Label Area -->
+                <div class="d-flex justify-content-between align-items-center mb-4 text-secondary">
+                    <span class="fw-bold d-flex align-items-center gap-2 text-white-50">
+                        <i class="bi bi-collection-play-fill" style="font-size: 1.2rem;"></i> Your Library
+                    </span>
+                    <button class="btn text-white-50 p-0" style="font-size: 1.2rem;">
+                        <i class="bi bi-plus-lg"></i> <span class="fs-6 fw-bold text-white ms-1">Create</span>
+                    </button>
+                </div>
+
+                <!-- Create Playlist Action card container -->
+                <div class="sidebar-card">
+                    <h5>Create your first playlist</h5>
+                    <p>It's easy, we'll help you</p>
+                    <button class="btn-sidebar-action">Create playlist</button>
+                </div>
+
+                <!-- Explore Podcast Action card container -->
+                <div class="sidebar-card">
+                    <h5>Let's find some podcasts to follow</h5>
+                    <p>We'll keep you updated on new episodes</p>
+                    <button class="btn-sidebar-action">Browse podcasts</button>
+                </div>
+            </div>
+
+            <!-- Sidebar Institutional Hyperlinks Area -->
+            <div>
+                <div class="sidebar-footer-links">
+                    <a href="#">Legal</a>
+                    <a href="#">Safety & Privacy Center</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookies</a>
+                    <a href="#">About Ads</a>
+                    <a href="#">Accessibility</a>
+                    <a href="#">Cookies</a>
+                </div>
+                <button class="btn-lang d-flex align-items-center gap-1">
+                    <i class="bi bi-globe"></i> English
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Media Dynamic Dashboard Container Area -->
+        <main class="content-section">
+            
+            <!-- Category Block 1: Trending songs row section -->
+            <section class="mb-5">
+                <div class="section-header">
+                    <h2>Trending songs</h2>
+                    <a href="#">Show all</a>
+                </div>
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/songs_cover/to_phir_aao.png" alt="Toh Phir Aao">
+                            <h6>Toh Phir Aao</h6>
+                            <p>Pritam, Mustafa Zahid, Sayeed Quadri</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/songs_cover/arz_kia_hai.png" alt="Arz Kiya Hai">
+                            <h6>Arz Kiya Hai | Coke Studio Bharat</h6>
+                            <p>Anuv Jain</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/songs_cover/saree.png" alt="Saree">
+                            <h6>Saree (From "Dhamaal 4")</h6>
+                            <p>Tanishk Bagchi, Sanju Rathod, G-SPXRK, Rashm...</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/songs_cover/aarzu.png" alt="Aarzu">
+                            <h6>Aarzu (with Asim Azhar)</h6>
+                            <p>Asim Azhar, Noor, Khan, Madhurxo</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/songs_cover/banja_tu.png" alt="Ban Ja Tu">
+                            <h6>Ban Ja Tu</h6>
+                            <p>Charan Preet, Badshah</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/songs_cover/low_fade.png" alt="Low Fade">
+                            <h6>Low Fade</h6>
+                            <p>Karan Aujla, Mxrci</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Block 2: Popular artists row section -->
+            <section class="mb-5">
+                <div class="section-header">
+                    <h2>Popular artists</h2>
+                    <a href="#">Show all</a>
+                </div>
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                    <div class="col">
+                        <div class="spotify-card text-center">
+                            <img src="covers/artists_cover/pritam.jpg" class="artist-img" alt="Pritam">
+                            <h6 class="text-start">Pritam</h6>
+                            <p class="text-start">Artist</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card text-center">
+                            <img src="covers/artists_cover/ar_rahman.jpg" class="artist-img" alt="A.R. Rahman">
+                            <h6 class="text-start">A.R. Rahman</h6>
+                            <p class="text-start">Artist</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card text-center">
+                            <img src="covers/artists_cover/arijit_sing.jpg" class="artist-img" alt="Arijit Singh">
+                            <h6 class="text-start">Arijit Singh</h6>
+                            <p class="text-start">Artist</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card text-center">
+                            <img src="covers/artists_cover/sachin_jigar.jpg" class="artist-img" alt="Sachin-Jigar">
+                            <h6 class="text-start">Sachin-Jigar</h6>
+                            <p class="text-start">Artist</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card text-center">
+                            <img src="covers/artists_cover/vishal_shekhar.jpg" class="artist-img" alt="Vishal-Shekhar">
+                            <h6 class="text-start">Vishal-Shekhar</h6>
+                            <p class="text-start">Artist</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card text-center">
+                            <img src="covers/artists_cover/atif_aslam.jpg" class="artist-img" alt="Atif Aslam">
+                            <h6 class="text-start">Atif Aslam</h6>
+                            <p class="text-start">Artist</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Block 3: Popular albums and singles section -->
+            <section class="mb-5">
+                <div class="section-header">
+                    <h2>Popular albums and singles</h2>
+                    <a href="#">Show all</a>
+                </div>
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/albums_cover/aashiqui_2.jpg" alt="Aashiqui 2">
+                            <h6>Aashiqui 2</h6>
+                            <p>Mithoon, Ankit Tiwari, Jeet Gannguli</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/albums_cover/ye_jawani.jpg" alt="Yeh Jawaani Hai Deewani">
+                            <h6>Yeh Jawaani Hai Deewani</h6>
+                            <p>Pritam</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/albums_cover/sanam_teri_kasam.jpg" alt="Sanam Teri Kasam">
+                            <h6>Sanam Teri Kasam</h6>
+                            <p>Himesh Reshammiya</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/albums_cover/finding_her.jpg" alt="Finding Her">
+                            <h6>Finding Her</h6>
+                            <p>Anuv Jain</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/albums_cover/young_goat.png" alt="Young G.O.A.T.">
+                            <h6>Young G.O.A.T.</h6>
+                            <p>Sidhu Moose Wala</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/albums_cover/ranjhaa.jpg" alt="Raanjhan">
+                            <h6>Raanjhan (From "Raanjhan")</h6>
+                            <p>Sachet-Parampara</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Block 4: Popular radio section -->
+            <section class="mb-5">
+                <div class="section-header">
+                    <h2>Popular radio</h2>
+                    <a href="#">Show all</a>
+                </div>
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/radio_cover/arjit_radio.png" alt="Arijit Singh Radio">
+                            <h6>Arijit Singh Radio</h6>
+                            <p>With Jeet Gannguli, Pritam, Shaarib Toshi an...</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/radio_cover/kk_radio.png" alt="KK Radio">
+                            <h6>KK Radio</h6>
+                            <p>With Pritam, Shaarib Toshi, Sayeed Quadri...</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/radio_cover/shreya_radio.png" alt="Shreya Ghoshal Radio">
+                            <h6>Shreya Ghoshal Radio</h6>
+                            <p>With Atif Aslam, Shaan, Abhijeet and more</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/radio_cover/alka_radio.png" alt="Alka Yagnik Radio">
+                            <h6>Alka Yagnik Radio</h6>
+                            <p>With Vinod Rathod, Kumar Sanu, Udit...</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/radio_cover/diljit_radio.png" alt="Diljit Dosanjh Radio">
+                            <h6>Diljit Dosanjh Radio</h6>
+                            <p>With Karan Aujla, AP Dhillon, Harrdy Sandhu...</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/radio_cover/ar_rahman_radio.png" alt="A.R. Rahman Radio">
+                            <h6>A.R. Rahman Radio</h6>
+                            <p>With Unnikrishnan, Hariharan, Shankar...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Block 5: Featured Charts Section -->
+            <section class="mb-5">
+                <div class="section-header">
+                    <h2>Featured Charts</h2>
+                    <a href="#">Show all</a>
+                </div>
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                    <!-- Card 1 -->
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/charts_cover/top_global.png" alt="Top Songs Global">
+                            <h6>Top Songs Global</h6>
+                            <p>Your weekly update of the most played tracks...</p>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/charts_cover/top_india.png" alt="Top Songs India">
+                            <h6>Top Songs India</h6>
+                            <p>Your weekly update of the most played tracks...</p>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/charts_cover/top_50_global.png" alt="Top 50 Global">
+                            <h6>Top 50 Global</h6>
+                            <p>Your daily update of the most played tracks righ...</p>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="col">
+                        <div class="spotify-card">
+                            <img src="covers/charts_cover/top_50_india.png" alt="Top 50 India">
+                            <h6>Top 50 India</h6>
+                            <p>Your daily update of the most played tracks righ...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottom Multi-Column Information Directory Links Grid -->
+            <footer class="footer-nav">
+                <div class="row">
+                    <div class="col-6 col-md-4 col-lg-2 mb-4">
+                        <h6>Company</h6>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Jobs</a></li>
+                            <li><a href="#">For the Record</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 mb-4">
+                        <h6>Communities</h6>
+                        <ul>
+                            <li><a href="#">For Artists</a></li>
+                            <li><a href="#">Developers</a></li>
+                            <li><a href="#">Advertising</a></li>
+                            <li><a href="#">Investors</a></li>
+                            <li><a href="#">Vendors</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2 mb-4">
+                        <h6>Useful links</h6>
+                        <ul>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Free Mobile App</a></li>
+                            <li><a href="#">Popular by Country</a></li>
+                            <li><a href="#">Import your music</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 mb-4">
+                        <h6>Spotify Plans</h6>
+                        <ul>
+                            <li><a href="#">Premium Standard</a></li>
+                            <li><a href="#">Premium Platinum</a></li>
+                            <li><a href="#">Premium Student</a></li>
+                            <li><a href="#">Spotify Free</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-lg-2 mb-4 text-start text-lg-end social-icons">
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="copyright-bar d-flex justify-content-between pt-4 border-top border-secondary-subtle">
+                    <span>&copy; 2026 Spotify AB</span>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Fixed Bottom Banner: Logged out Music Sign Up CTA section -->
+    <div class="preview-banner">
+        <div>
+            <p class="text-uppercase tracking-wider fw-bold text-white-50" style="font-size: 0.75rem; letter-spacing: 1px;">Preview of Spotify</p>
+            <p class="fw-semibold text-white" style="font-size: 0.95rem;">Sign up to get unlimited songs and podcasts with occasional ads. No credit card needed.</p>
+        </div>
+        <button class="btn-banner-signup">Sign up free</button>
+    </div>
+
+</body>
+</html>
