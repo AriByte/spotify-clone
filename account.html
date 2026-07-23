@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - Spotify</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Embedded CSS -->
+    <style>
+        /* Base Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* ===== Language Banner ===== */
+        .lang-banner {
+            background-color: #0d6efd;
+            padding: 10px 24px;
+            
+        }
+
+        .lang-banner-link {
+            color: #fff;
+            text-decoration: underline;
+            font-size: 0.9rem;
+            
+            
+        }
+
+        .btn-close-lang {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        /* ===== Account Navbar ===== */
+        .account-navbar {
+            background-color: #000000;
+            padding: 16px 40px;
+        }
+
+        .spotify-wordmark {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            
+        }
+
+        .account-nav-link {
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            margin-right: 28px;
+            transition: color 0.2s ease;
+        }
+
+        .account-nav-link:hover {
+            color: #1ed760;
+        }
+
+        .account-nav-divider {
+            width: 1px;
+            height: 20px;
+            background-color: #535353;
+            margin-right: 28px;
+        }
+
+        /* Profile toggle button */
+        .profile-toggle-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0;
+        }
+
+        .profile-icon-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .profile-chevron {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .profile-menu-dropdown.show .profile-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Profile dropdown menu */
+        .profile-dropdown-menu {
+            background-color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 0;
+            min-width: 160px;
+            margin-top: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-dropdown-menu .dropdown-item {
+            color: #6a6a6a;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 8px 20px;
+        }
+
+        .profile-dropdown-menu .dropdown-item.active-item {
+            color: #000;
+        }
+
+        .profile-dropdown-menu .dropdown-item:hover,
+        .profile-dropdown-menu .dropdown-item:focus {
+            background-color: #ffffff;
+            color: #1ed760;
+        }
+
+        /* ===== Main Content ===== */
+        .account-main {
+            background-color: #000000;
+            padding: 32px 40px 60px;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        /* Search box */
+        .account-search-wrapper {
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .account-search-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a7a7a7;
+        }
+
+        .account-search-input {
+            width: 100%;
+            background-color: #1f1f1f;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 16px 14px 44px;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .account-search-input::placeholder {
+            color: #a7a7a7;
+        }
+
+        .account-search-input:focus {
+            outline: 2px solid #fff;
+            background-color: #2a2a2a;
+        }
+
+        /* Plan Row */
+        .plan-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .plan-card-free {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .plan-pill {
+            background-color: #333;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .plan-card-free h2 {
+            color: #6a6a6a;
+            font-weight: 800;
+            font-size: 2rem;
+            margin: 40px 0 24px;
+        }
+
+        .btn-explore-plans {
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 24px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            transition: transform 0.15s ease;
+        }
+
+        .btn-explore-plans:hover {
+            transform: scale(1.04);
+        }
+
+        .plan-card-premium {
+            background: linear-gradient(135deg, #7925ff, #f257d5);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            transition: filter 0.2s ease;
+        }
+
+        .plan-card-premium:hover {
+            filter: brightness(1.1);
+        }
+
+        .plan-card-premium i {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .plan-card-premium p {
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Settings Card Sections */
+        .settings-card {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px 20px 8px;
+            margin-bottom: 24px;
+        }
+
+        .settings-card h3 {
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: background-color 0.15s ease;
+        }
+
+        .settings-row:hover {
+            background-color: #2a2a2a;
+        }
+
+        .settings-row:hover .settings-arrow {
+            transform: translateX(3px);
+        }
+
+        .settings-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 6px;
+            background-color: #2f2f2f;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .settings-label {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        .settings-arrow {
+            color: #a7a7a7;
+            transition: transform 0.15s ease;
+        }
+
+        /* ===== Footer ===== */
+        .account-footer {
+            background-color: #000000;
+            padding: 48px 40px 24px;
+            border-top: 1px solid #222;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+        }
+
+        .footer-col h6 {
+            color: #a7a7a7;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-bottom: 14px;
+            transition: color 0.15s ease;
+        }
+
+        .footer-col a:hover {
+            color: #1ed760;
+            text-decoration: underline;
+        }
+
+        .footer-link-green {
+            color: #1ed760 !important;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .social-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #292929;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.15s ease;
+        }
+
+        .social-circle:hover {
+            background-color: #3a3a3a;
+            color: #fff;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+
+        .footer-legal-links a {
+            color: #a7a7a7;
+            font-size: 0.8rem;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        .footer-legal-links a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .btn-lang {
+            background: none;
+            border: 1px solid #727272;
+            border-radius: 20px;
+            color: #fff;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .btn-lang:hover {
+            border-color: #fff;
+        }
+
+        .footer-copyright {
+            color: #a7a7a7;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dismissible Language Notice Banner -->
+    <div class="lang-banner d-flex justify-content-between align-items-center" id="langBanner">
+        <a href="#" class="lang-banner-link">भारत (हिन्दी)</a>
+        <button class="btn-close-lang" id="closeLangBanner" aria-label="Close">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <!-- Account Page Top Navbar -->
+    <nav class="account-navbar d-flex justify-content-between align-items-center">
+        <a href="index.html" class="d-flex align-items-center gap-2 text-white text-decoration-none">
+            <i class="bi bi-spotify" style="font-size: 1.8rem;"></i>
+            <span class="spotify-wordmark">Spotify</span>
+        </a>
+
+        <div class="d-flex align-items-center">
+            <a href="#" class="account-nav-link">Premium plans</a>
+            <a href="#" class="account-nav-link">Support</a>
+            <a href="#" class="account-nav-link">Download</a>
+
+            <div class="account-nav-divider"></div>
+
+            <!-- Profile Dropdown -->
+            <div class="dropdown profile-menu-dropdown">
+                <button class="btn profile-toggle-btn d-flex align-items-center gap-2" type="button"
+                    id="profileMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="profile-icon-circle"><i class="bi bi-person-fill"></i></span>
+                    <span>Profile</span>
+                    <i class="bi bi-chevron-up profile-chevron"></i>
+                </button>
+                <ul class="dropdown-menu profile-dropdown-menu" aria-labelledby="profileMenuBtn">
+                    <li><a class="dropdown-item active-item" href="account.html">Account</a></li>
+                    <li><a class="dropdown-item" href="index.html">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Account Content -->
+    <main class="account-main">
+
+        <!-- Search -->
+        <div class="account-search-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text" class="account-search-input" placeholder="Search account or help articles">
+        </div>
+
+        <!-- Your Plan Row -->
+        <div class="plan-row">
+            <div class="plan-card-free">
+                <span class="plan-pill">Your plan</span>
+                <h2>Spotify Free</h2>
+                <button class="btn-explore-plans">Explore plans</button>
+            </div>
+            <div class="plan-card-premium">
+                <i class="bi bi-gem"></i>
+                <p>Join Premium</p>
+            </div>
+        </div>
+
+        <!-- Account Section -->
+        <section class="settings-card">
+            <h3>Account</h3>
+
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-spotify"></i></span>
+                <span class="settings-label">Manage your subscription</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-pencil-fill"></i></span>
+                <span class="settings-label">Edit personal info</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-arrow-clockwise"></i></span>
+                <span class="settings-label">Recover playlists</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-house-fill"></i></span>
+                <span class="settings-label">Address</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+        </section>
+
+        <!-- Payment Section -->
+        <section class="settings-card">
+            <h3>Payment</h3>
+
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-receipt"></i></span>
+                <span class="settings-label">Payment history</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-credit-card"></i></span>
+                <span class="settings-label">Saved payment cards</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-tag-fill"></i></span>
+                <span class="settings-label">Redeem</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+        </section>
+
+        <!-- Security and Privacy Section -->
+        <section class="settings-card">
+            <h3>Security and privacy</h3>
+
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span>
+                <span class="settings-label">Manage apps</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-bell-fill"></i></span>
+                <span class="settings-label">Notification settings</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-eye-fill"></i></span>
+                <span class="settings-label">Account privacy</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-card-list"></i></span>
+                <span class="settings-label">Edit login methods</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-phone-fill"></i></span>
+                <span class="settings-label">Set device password</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-trash-fill"></i></span>
+                <span class="settings-label">Delete account</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-arrow-right"></i></span>
+                <span class="settings-label">Sign out everywhere</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+        </section>
+
+        <!-- Advertising Section -->
+        <section class="settings-card">
+            <h3>Advertising</h3>
+
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-pencil-fill"></i></span>
+                <span class="settings-label">Ad preferences</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+        </section>
+
+        <!-- Help Section -->
+        <section class="settings-card">
+            <h3>Help</h3>
+
+            <a href="#" class="settings-row">
+                <span class="settings-icon"><i class="bi bi-question-circle"></i></span>
+                <span class="settings-label">Spotify support</span>
+                <i class="bi bi-chevron-right settings-arrow"></i>
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="account-footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <i class="bi bi-spotify" style="font-size: 1.8rem;"></i>
+                <span class="spotify-wordmark">Spotify</span>
+            </div>
+
+            <div class="footer-col">
+                <h6>COMPANY</h6>
+                <a href="#">About</a>
+                <a href="#">Jobs</a>
+                <a href="#">For the Record</a>
+            </div>
+
+            <div class="footer-col">
+                <h6>COMMUNITIES</h6>
+                <a href="#">For Artists</a>
+                <a href="#">Developers</a>
+                <a href="#">Advertising</a>
+                <a href="#">Investors</a>
+                <a href="#">Vendors</a>
+            </div>
+
+            <div class="footer-col">
+                <h6>USEFUL LINKS</h6>
+                <a href="#">Support</a>
+                <a href="#">Web Player</a>
+                <a href="#">Free Mobile App</a>
+                <a href="#">Import your music</a>
+            </div>
+
+            <div class="footer-col">
+                <h6>SPOTIFY PLANS</h6>
+                <a href="#">Premium Standard</a>
+                <a href="#">Premium Platinum</a>
+                <a href="#">Premium Student</a>
+                <a href="#">Spotify Free</a>
+            </div>
+
+            <div class="footer-social">
+                <a href="#" class="social-circle"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="social-circle"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" class="social-circle"><i class="bi bi-facebook"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-bottom d-flex justify-content-between align-items-center flex-wrap">
+            <div class="footer-legal-links">
+                <a href="#">Legal</a>
+                <a href="#">Safety & Privacy Center</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Cookies</a>
+                <a href="#">About Ads</a>
+                <a href="#">Accessibility</a>
+            </div>
+            <div class="d-flex align-items-center gap-4">
+                <button class="btn-lang d-flex align-items-center gap-1">
+                    <i class="bi bi-globe"></i> India (English)
+                </button>
+                <span class="footer-copyright">© 2026 Spotify AB</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('closeLangBanner').addEventListener('click', function () {
+            document.getElementById('langBanner').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

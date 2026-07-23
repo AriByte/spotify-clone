@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Spotify</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts: Montserrat for exact geometric look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Global Background and Scroll Configuration */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto; /* Keeps the interface scrollable */
+            padding: 96px 20px;
+        }
+
+        /* Central Login Box Wrapper Layout */
+        .login-container {
+            width: 100%;
+            max-width: 330px;
+            text-align: center;
+        }
+
+        /* Spotify Circular Branding Logo */
+        .brand-logo {
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 12px;
+            
+        }
+
+        /* Primary Section Heading */
+        .main-heading {
+            font-weight: 900;
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            margin-bottom: 35px;
+        }
+
+        /* Input Form Label Styling */
+        .form-label-custom {
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+        }
+
+        /* Email Form Text Box Field */
+        .input-field-custom {
+            background-color: #121212;
+            border: 1px solid #727272;
+            border-radius: 4px;
+            color: #ffffff;
+            width: 100%;
+            height: 48px;
+            padding: 14px 16px;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .input-field-custom:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 1px #ffffff;
+        }
+
+        /* Spotify Iconic Bold Green Button */
+        .btn-spotify-primary {
+            background-color: #1ed760;
+            color: #000000;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            width: 100%;
+            height: 48px;
+            padding: 14px 0;
+            margin-bottom: 18px;
+            
+        }
+        .btn-spotify-primary:hover {
+            transform: scale(1.02);
+            background-color: #21e065;
+        }
+
+        /* Divider 'or' label layout element */
+        .divider-or {
+            color: #ffffff;
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        /* Social Authorization Buttons block (Flex Aligned) */
+        .btn-social-auth {
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #727272;
+            border-radius: 50px;
+            width: 100%;
+            padding: 12px 24px;  /* Keeps uniform breathing room on the edges */
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            height: 48px;
+        }
+        .btn-social-auth:hover {
+            border-color: #ffffff;
+            transform: scale(1.04);
+        }
+        
+        /* Forces the icon to stay on the absolute left edge */
+        .btn-social-auth i {
+            font-size: 1.25rem;
+            margin-right: auto; 
+        }
+        
+        /* Centers the text completely relative to the whole button width */
+        .btn-social-auth .btn-text {
+            margin-left: auto;
+            margin-right: auto;
+            transform: translateX(-12px); /* Offsets the width of the icon so text is dead-center */
+        }
+
+        /* Alternative Auth Links Grouping */
+        .signup-prompt {
+            color: #b3b3b3;
+            font-size: 0.95rem;
+            margin-top: 48px;
+            margin-bottom: 16px;
+        }
+        .link-signup-toggle {
+            color: #ffffff;
+            font-weight: 700;
+            
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 60px;
+        }
+        .link-signup-toggle:hover {
+            transform:scale(1.04);
+        }
+
+        /* Captcha Security Footer Information Block */
+        .footer-captcha-terms {
+            font-size: 0.7rem;
+            color: #b3b3b3;
+            line-height: 1.5;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        .footer-captcha-terms a {
+            color: #b3b3b3;
+            text-decoration: underline;
+        }
+
+
+        .input-error {
+            border: 1px solid #f15e2c !important;
+            animation: shakeInput 0.3s ease;
+        }
+
+        .error-message {
+            color: #f15e2c;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        @keyframes shakeInput {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .form-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background-color: #f15e2c;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 12px 24px;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 2000;
+        }
+
+        .form-toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="form-toast" id="formToast"></div>
+
+    <!-- Central Login Container Block -->
+    <div class="login-container">
+        
+        <!-- Header Spotify Brand Symbol Icon -->
+        <div class="brand-logo">
+            <i class="bi bi-spotify"></i>
+        </div>
+
+        <!-- Section Main Welcome Title -->
+        <h1 class="main-heading">Welcome back</h1>
+
+        <!-- Form Elements Area -->
+        <form action="loggedindex.html" id="loginEmailForm">
+            <!-- Email input group label configuration -->
+            <label class="form-label-custom">Email</label>
+            <input type="email" class="input-field-custom" id="loginEmailInput" required>
+            <span class="error-message" id="loginEmailError"></span>
+
+            <!-- Submission Trigger -->
+            <button type="submit" class="btn-spotify-primary">Continue</button>
+        </form>
+
+        <!-- Dynamic Structural Divider Text label component -->
+        <div class="divider-or">or</div>
+
+        <!-- Explicit Social Identity Provider OAuth Buttons Panel (Flex Aligned) -->
+        <div class="w-100 mt-0">
+            <!-- Phone Auth Option -->
+            <button class="btn-social-auth mb-2 w-100" onclick="window.location.href='login_mo_no.html'">
+                <i class="bi bi-phone"></i>
+                <span class="btn-text">Continue with phone number</span>
+            </button>
+
+            <!-- Google Auth Option -->
+            <button class="btn-social-auth mb-2 w-100" onclick="window.location.href='index.html'">
+                <i class="bi bi-google text-danger"></i>
+                <span class="btn-text">Continue with Google</span>
+            </button>
+
+            <!-- Facebook Auth Option -->
+            <button class="btn-social-auth mb-2 w-100" onclick="window.location.href='index.html'">
+                <i class="bi bi-facebook text-primary"></i>
+                <span class="btn-text">Continue with Facebook</span>
+            </button>
+
+            <!-- Apple Auth Option -->
+            <button class="btn-social-auth mb-2 w-100" onclick="window.location.href='index.html'">
+                <i class="bi bi-apple"></i>
+                <span class="btn-text">Continue with Apple</span>
+            </button>
+        </div>
+
+        <!-- Redirect Navigation Anchor Group -->
+        <div class="signup-prompt">Don't have an account?</div>
+        <a href="signup.html" class="link-signup-toggle">Sign up</a>
+
+        <!-- Captcha Legal Terms Disclosure Footer Section -->
+        <div class="footer-captcha-terms">
+            This site is protected by reCAPTCHA and the Google 
+            <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a> apply.
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

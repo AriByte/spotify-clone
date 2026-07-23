@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up - Spotify</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts: Montserrat for exact Spotify geometric typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Global Layout Configurations */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            padding: 48px 20px 96px 20px;
+        }
+
+        /* Container Layout Dimensions */
+        .signup-container {
+            width: 100%;
+            max-width: 330px;
+            text-align: center;
+        }
+
+        /* Spotify Brand Logo Header */
+        .brand-logo {
+            font-size: 2.0rem;
+            color: #ffffff;
+            margin-bottom: 24px;
+            margin-top: 50px;
+        }
+
+        /* Main Heading Typography */
+        .main-heading {
+            font-weight: 800;
+            font-size: 2.8rem;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 40px;
+            margin-top: -10px;
+            
+        }
+
+        /* Custom Input Label Styling */
+        .form-label-custom {
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+        }
+
+        /* Text Input Field Styling */
+        .input-field-custom {
+            background-color: #121212;
+            border: 1px solid #727272;
+            border-radius: 4px;
+            color: #ffffff;
+            width: 100%;
+            height: 48px;
+            padding: 14px 16px;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+        
+        .input-field-custom::placeholder {
+            color: #d2d2d2;
+        }
+
+        .input-field-custom:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 1px #ffffff;
+        }
+
+        /* Spotify Primary CTA Green Button */
+        .btn-spotify-primary {
+            background-color: #1ed760;
+            color: #000000;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            width: 100%;
+            height: 48px;
+            padding: 12px 0;
+            margin-bottom: 24px;
+            transition: transform 0.1s ease, background-color 0.1s ease;
+        }
+
+        .btn-spotify-primary:hover {
+            
+            background-color: #21e065;
+        }
+
+        /* Divider Text Component */
+        .divider-or {
+            color: #ffffff;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        /* Social Authorization Buttons Block */
+        .btn-social-auth {
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #727272;
+            border-radius: 50px;
+            width: 100%;
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            height: 48px;
+            transition: border-color 0.1s ease, transform 0.1s ease;
+        }
+
+        .btn-social-auth:hover {
+            border-color: #ffffff;
+            transform: scale(1.02);
+        }
+
+        /* Icon Position in Social Button */
+        .btn-social-auth i {
+            font-size: 1.25rem;
+            margin-right: auto;
+        }
+
+        /* Perfectly Centered Text relative to Button Bounds */
+        .btn-social-auth .btn-text {
+            margin-left: auto;
+            margin-right: auto;
+            transform: translateX(-12px);
+        }
+
+        /* Bottom Redirect Prompts Block */
+        .login-prompt {
+            color: #b3b3b3;
+            font-size: 0.95rem;
+            margin-top: 40px;
+            margin-bottom: 12px;
+        }
+
+        .link-login-toggle {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-block;
+            text-decoration: none;
+            margin-bottom: 48px;
+        }
+
+        .link-login-toggle:hover {
+            transform: scale(1.04);
+            color: #ffffff;
+        }
+
+        /* Legal Terms Footer Section */
+        .footer-captcha-terms {
+            font-size: 0.7rem;
+            color: #b3b3b3;
+            line-height: 1.5;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .footer-captcha-terms a {
+            color: #b3b3b3;
+            text-decoration: underline;
+        }
+
+
+
+        .input-error {
+            border: 1px solid #f15e2c !important;
+            animation: shakeInput 0.3s ease;
+        }
+
+        .error-message {
+            color: #f15e2c;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        @keyframes shakeInput {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .form-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background-color: #f15e2c;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 12px 24px;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 2000;
+        }
+
+        .form-toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="form-toast" id="formToast"></div>
+
+    <div class="signup-container">
+        
+        <!-- Header Spotify Brand Symbol Icon -->
+        <div class="brand-logo">
+            <i class="bi bi-spotify"></i>
+        </div>
+
+        <!-- Hero Title -->
+        <h1 class="main-heading">Sign up to start listening</h1>
+
+        <!-- Sign Up Form -->
+        <form action="loggedindex.html" id="signupEmailForm">
+            <label class="form-label-custom" for="signupEmailInput">Email address</label>
+            <input 
+                type="email" 
+                id="signupEmailInput"
+                class="input-field-custom" 
+                placeholder="name@domain.com"
+                required
+            >
+            <span class="error-message" id="signupEmailError"></span>
+
+            <button type="submit" class="btn-spotify-primary">Next</button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider-or">or</div>
+
+        <!-- Social Identity Provider Registration Buttons -->
+        <div class="w-100">
+            <button class="btn-social-auth mb-2 w-100" onclick="window.location.href='signup_mo_no.html'">
+                <i class="bi bi-phone"></i>
+                <span class="btn-text">Sign up with phone number</span>
+            </button>
+
+            <button class="btn-social-auth mb-2 w-100" onclick="window.location.href='index.html'">
+                <i class="bi bi-google text-danger"></i>
+                <span class="btn-text">Sign up with Google</span>
+            </button>
+
+            <button class="btn-social-auth mb-2 w-100" onclick="window.location.href='index.html'">
+                <i class="bi bi-apple"></i>
+                <span class="btn-text">Sign up with Apple</span>
+            </button>
+        </div>
+
+        <!-- Navigation back to Login -->
+        <div class="login-prompt">Already have an account?</div>
+        <a href="login.html" class="link-login-toggle">Log in</a>
+
+        <!-- Captcha Legal Terms Disclosure Footer -->
+        <div class="footer-captcha-terms">
+            This site is protected by reCAPTCHA and the Google 
+            <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a> apply.
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

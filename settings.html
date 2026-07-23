@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings - Spotify</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #000000;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        overflow-x: hidden;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    /* ===== NAVBAR ===== */
+    .spotify-navbar {
+        background-color: #000000;
+        padding: 8px 16px;
+        height: 64px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #1a1a1a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-box-container {
+        background-color: #1f1f1f;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        width: 420px;
+        color: #b3b3b3;
+    }
+
+    .search-box-container .search-input {
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        flex-grow: 1;
+        font-size: 0.9rem;
+    }
+
+    .search-box-container .search-input::placeholder {
+        color: #b3b3b3;
+    }
+
+    .nav-link-custom {
+        color: #b3b3b3;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-right: 20px;
+        transition: color 0.15s ease;
+    }
+
+    .nav-link-custom:hover {
+        color: #fff;
+    }
+
+    .user-avatar-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #f15e2c;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: none;
+    }
+
+    .user-avatar-circle:hover {
+        background-color: #ff6a33;
+    }
+
+    .user-menu-dropdown .dropdown-toggle::after {
+        display: none;
+    }
+
+    .user-dropdown-menu {
+        background-color: #282828;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 0;
+        width: 280px;
+        margin-top: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .user-dropdown-menu .dropdown-item {
+        color: #e6e6e6;
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .user-dropdown-menu .dropdown-item i {
+        font-size: 0.8rem;
+        opacity: 0.7;
+    }
+
+    .user-dropdown-menu .dropdown-item:hover,
+    .user-dropdown-menu .dropdown-item:focus {
+        background-color: #3e3e3e;
+        color: #fff;
+    }
+
+    .user-dropdown-menu .dropdown-divider {
+        border-color: #4d4d4d;
+        margin: 8px 0;
+    }
+
+    .dropdown-header-custom {
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 8px 20px 4px;
+    }
+
+    .update-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background-color: #333333;
+        margin: 8px 16px 4px;
+        padding: 12px;
+        border-radius: 6px;
+    }
+
+    .update-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 50%;
+        background-color: #4d4d4d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.9rem;
+    }
+
+    .update-text {
+        font-size: 0.8rem;
+        color: #d9d9d9;
+        line-height: 1.4;
+    }
+
+    .update-time {
+        color: #a0a0a0;
+    }
+
+    /* ===== MAIN WRAPPER ===== */
+    .main-wrapper {
+        display: flex;
+        gap: 8px;
+        padding: 0 8px 8px;
+        min-height: calc(100vh - 64px);
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+        background-color: #000000;
+        border-radius: 8px;
+        width: 400px;
+        min-width: 280px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .btn-create-pill {
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .sidebar-card {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .sidebar-card h5 {
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .sidebar-card p {
+        color: #b3b3b3;
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+    }
+
+    .btn-sidebar-action {
+        background-color: #fff;
+        color: #000;
+        border: none;
+        border-radius: 24px;
+        padding: 8px 16px;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    .btn-sidebar-action:hover {
+        transform: scale(1.04);
+    }
+
+    .sidebar-footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        margin-bottom: 16px;
+    }
+
+    .sidebar-footer-links a {
+        color: #a7a7a7;
+        font-size: 0.75rem;
+    }
+
+    .sidebar-footer-links a:hover {
+        text-decoration: underline;
+    }
+
+    .btn-lang {
+        background: none;
+        border: 1px solid #727272;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+
+    .btn-lang:hover {
+        border-color: #fff;
+    }
+
+    /* ===== CONTENT SECTION ===== */
+    .content-section {
+        background-color: #121212;
+        border-radius: 8px;
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 40px 70px 60px;
+    }
+
+    /* ===== SETTINGS PAGE ===== */
+    .settings-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .settings-title-row h1 {
+        color: #fff;
+        font-weight: 700;
+        font-size: 2.5rem;
+    }
+
+    .settings-search-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.3rem;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.15s ease;
+    }
+
+    .settings-search-btn:hover {
+        background-color: #2a2a2a;
+    }
+
+    .settings-block {
+        margin-bottom: 36px;
+    }
+
+    .settings-block-title {
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.15rem;
+        margin-bottom: 16px;
+    }
+
+    .settings-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        padding: 14px 0;
+        border-bottom: 1px solid #2a2a2a;
+    }
+
+    .settings-row:last-child {
+        border-bottom: none;
+    }
+
+    .settings-row-label {
+        color: #d9d9d9;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .settings-row-label strong {
+        display: block;
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .settings-info-note {
+        color: #a7a7a7;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+
+    /* Edit button */
+    .btn-settings-edit {
+        background: none;
+        border: 1px solid #727272;
+        color: #fff;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        transition: border-color 0.15s ease;
+    }
+
+    .btn-settings-edit:hover {
+        border-color: #fff;
+    }
+
+    /* Custom select dropdown */
+    .settings-select {
+        background-color: #2a2a2a;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        min-width: 220px;
+        cursor: pointer;
+    }
+
+    .settings-select:focus {
+        outline: 2px solid #fff;
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        min-width: 44px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #4d4d4d;
+        border-radius: 24px;
+        transition: background-color 0.2s ease;
+    }
+
+    .toggle-slider::before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s ease;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+        background-color: #1ed760;
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(20px);
+    }
+
+    /* Import library button */
+    .btn-import-library {
+        background: none;
+        border: 1px solid #727272;
+        color: #fff;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        transition: border-color 0.15s ease;
+    }
+
+    .btn-import-library:hover {
+        border-color: #fff;
+    }
+
+    /* EQ Graph (Playback section) */
+    .eq-graph-card {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 24px;
+        position: relative;
+        margin-bottom: 16px;
+    }
+
+    .eq-db-label {
+        color: #a7a7a7;
+        font-size: 0.75rem;
+        font-weight: 700;
+        position: absolute;
+    }
+
+    .eq-db-top {
+        top: 20px;
+        left: 24px;
+    }
+
+    .eq-db-bottom {
+        bottom: 40px;
+        left: 24px;
+    }
+
+    .eq-freq-labels {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        margin-top: 8px;
+    }
+
+    .eq-freq-labels span {
+        color: #a7a7a7;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    /* Download app promo card */
+    .download-app-card {
+        background-color: #1f1f1f;
+        border-radius: 8px;
+        padding: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-bottom: 36px;
+    }
+
+    .download-app-card h4 {
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+    }
+
+    .download-app-card p {
+        color: #a7a7a7;
+        font-size: 0.9rem;
+        max-width: 480px;
+    }
+
+    .btn-download-app {
+        background-color: #1ed760;
+        color: #000;
+        border: none;
+        border-radius: 24px;
+        padding: 12px 24px;
+        font-weight: 800;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .btn-download-app:hover {
+        background-color: #26e065;
+        transform: scale(1.04);
+    }
+
+    /* ===== SETTINGS PAGE FOOTER (reuse profile footer style) ===== */
+    .profile-footer {
+        padding: 32px 0 0;
+        border-top: 1px solid #2a2a2a;
+        margin-top: 32px;
+    }
+
+    .profile-footer-top {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr auto;
+        gap: 24px;
+    }
+
+    .profile-footer-col h6 {
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    .profile-footer-col a {
+        display: block;
+        color: #a7a7a7;
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+        transition: color 0.15s ease;
+    }
+
+    .profile-footer-col a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .profile-footer-social {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .social-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #292929;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.15s ease;
+    }
+
+    .social-circle:hover {
+        background-color: #3a3a3a;
+    }
+
+    .profile-footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 24px;
+        margin-top: 24px;
+        border-top: 1px solid #2a2a2a;
+    }
+
+    .profile-footer-legal-links a {
+        color: #a7a7a7;
+        font-size: 0.75rem;
+        margin-right: 18px;
+    }
+
+    .profile-footer-legal-links a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .profile-footer-copyright {
+        color: #a7a7a7;
+        font-size: 0.75rem;
+    }
+</style>
+</head>
+<body>
+
+    <!-- Top Navigation Navbar Header Section -->
+    <nav class="spotify-navbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center flex-grow-1">
+            <a href="index.html" class="me-3 text-white logo-circle">
+                <i class="bi bi-music-note-beamed" style="font-size: 1.2rem;"></i>
+            </a>
+            <a href="loggedindex.html" class="btn rounded-circle me-3 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #e0dede;">
+                <i class="bi bi-house-door-fill text-dark" style="font-size: 1.2rem;"></i>
+            </a>
+            <div class="search-box-container d-none d-md-block d-flex align-items-center">
+                <i class="bi bi-search"></i>
+                <input type="text" class="search-input" placeholder="What do you want to play?">
+                <i class="bi bi-folder"></i>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <div class="d-none d-lg-flex align-items-center">
+                <a href="#" class="nav-link-custom">Premium</a>
+                <a href="#" class="nav-link-custom">Support</a>
+                <a href="#" class="nav-link-custom">Download</a>
+                <div style="width: 1px; height: 16px; background-color: #535353; margin-right: 20px;"></div>
+                <a href="#" class="nav-link-custom d-flex align-items-center gap-1">
+                    <i class="bi bi-arrow-down-circle"></i> Install App
+                </a>
+            </div>
+
+            <!-- Logged-in user dropdown -->
+            <div class="dropdown user-menu-dropdown">
+                <button class="btn user-avatar-circle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    A
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="userMenuButton">
+                    <li><a class="dropdown-item" href="account.html">Account <i class="bi bi-box-arrow-up-right"></i></a></li>
+                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                    <li><a class="dropdown-item" href="recents.html">Recents</a></li>
+                    <li><a class="dropdown-item" href="#">Upgrade to Premium <i class="bi bi-box-arrow-up-right"></i></a></li>
+                    <li><a class="dropdown-item" href="#">Support <i class="bi bi-box-arrow-up-right"></i></a></li>
+                    <li><a class="dropdown-item" href="#">Download <i class="bi bi-box-arrow-up-right"></i></a></li>
+                    <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+                    <li><a class="dropdown-item" href="index.html">Log out</a></li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li class="dropdown-header-custom">Your Updates</li>
+                    <li>
+                        <div class="update-card">
+                            <div class="update-icon"><i class="bi bi-megaphone-fill"></i></div>
+                            <div class="update-text">
+                                Say hello to Your Updates. Check here for news on your followers, playlists, events and more
+                                <span class="update-time">• 5w</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Workspace Grid Setup -->
+    <div class="main-wrapper">
+
+        <!-- Left Sidebar Section Component -->
+        <aside class="sidebar">
+            <div>
+                <div class="d-flex justify-content-between align-items-center mb-4 text-secondary">
+                    <span class="fw-bold d-flex align-items-center gap-2 text-white-50">
+                        <i class="bi bi-collection-play-fill" style="font-size: 1.2rem;"></i> Your Library
+                    </span>
+                    <button class="btn text-white-50 p-0 btn-create-pill" style="font-size: 1.2rem;">
+                        <i class="bi bi-plus-lg"></i> <span class="fs-6 fw-semibold text-white ms-1">Create</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-card">
+                    <h5>Create your first playlist</h5>
+                    <p>It's easy, we'll help you</p>
+                    <button class="btn-sidebar-action">Create playlist</button>
+                </div>
+
+                <div class="sidebar-card">
+                    <h5>Let's find some podcasts to follow</h5>
+                    <p>We'll keep you updated on new episodes</p>
+                    <button class="btn-sidebar-action">Browse podcasts</button>
+                </div>
+            </div>
+
+            <div>
+                <div class="sidebar-footer-links">
+                    <a href="#">Legal</a>
+                    <a href="#">Safety & Privacy Center</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookies</a>
+                    <a href="#">About Ads</a>
+                    <a href="#">Accessibility</a>
+                    <a href="#">Cookies</a>
+                </div>
+                <button class="btn-lang d-flex align-items-center gap-1">
+                    <i class="bi bi-globe"></i> English
+                </button>
+            </div>
+        </aside>
+
+        <!-- Settings Page Main Content -->
+        <main class="content-section">
+
+            <div class="settings-title-row">
+                <h1>Settings</h1>
+                <button class="settings-search-btn" aria-label="Search settings">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+
+            <!-- Account -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Account</h3>
+                <div class="settings-row">
+                    <span class="settings-row-label">Edit login methods</span>
+                    <button class="btn-settings-edit">Edit <i class="bi bi-box-arrow-up-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Language -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Language</h3>
+                <div class="settings-row">
+                    <span class="settings-row-label">Choose language - Changes will be applied after restarting the app</span>
+                    <select class="settings-select">
+                        <option>English (English)</option>
+                        <option>Hindi (हिन्दी)</option>
+                        <option>Spanish (Español)</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Audio quality -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Audio quality</h3>
+                <div class="settings-row">
+                    <span class="settings-row-label">Streaming quality</span>
+                    <select class="settings-select">
+                        <option>Automatic</option>
+                        <option>Low</option>
+                        <option>Normal</option>
+                        <option>High</option>
+                        <option>Very High</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <span class="settings-row-label">Normalize volume - Set the same volume level for all songs and podcasts</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Your Library -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Your Library</h3>
+                <div class="settings-row">
+                    <span class="settings-row-label">Use compact library layout</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <span class="settings-row-label">Import music from other apps</span>
+                    <button class="btn-import-library">Import library</button>
+                </div>
+            </section>
+
+            <!-- Display -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Display</h3>
+                <div class="settings-row">
+                    <span class="settings-row-label">Show the now-playing panel on click of play</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Videos and Canvas -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Videos and Canvas</h3>
+                <p class="settings-info-note mb-3"><i class="bi bi-info-circle"></i> It may take some time for your experience to update.</p>
+
+                <div class="settings-row">
+                    <span class="settings-row-label">
+                        <strong>Canvas</strong>
+                        Short, looping visuals when a song is playing.
+                    </span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row" style="border-bottom:none;">
+                    <span class="settings-row-label">
+                        <strong>Other videos</strong>
+                        Vertically scrolling videos, video podcasts, and videos from creators and authors. Video ads can't be turned off.
+                        <span class="settings-info-note"><i class="bi bi-info-circle"></i> When off, video podcasts play as audio-only.</span>
+                    </span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Playback -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Playback</h3>
+
+                <div class="eq-graph-card">
+                    <span class="eq-db-label eq-db-top">+12dB</span>
+                    <span class="eq-db-label eq-db-bottom">-12dB</span>
+
+                    <svg viewBox="0 0 900 220" style="width:100%; height:auto; margin-top:20px;" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="eqFill" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#888888" stop-opacity="0.5"/>
+                                <stop offset="100%" stop-color="#888888" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- vertical guide lines -->
+                        <line x1="30" y1="10" x2="30" y2="110" stroke="#3a3a3a" stroke-width="1"/>
+                        <line x1="190" y1="10" x2="190" y2="110" stroke="#3a3a3a" stroke-width="1"/>
+                        <line x1="350" y1="10" x2="350" y2="110" stroke="#3a3a3a" stroke-width="1"/>
+                        <line x1="510" y1="10" x2="510" y2="110" stroke="#3a3a3a" stroke-width="1"/>
+                        <line x1="670" y1="10" x2="670" y2="110" stroke="#3a3a3a" stroke-width="1"/>
+                        <line x1="830" y1="10" x2="830" y2="110" stroke="#3a3a3a" stroke-width="1"/>
+
+                        <!-- fill area below flat line -->
+                        <path d="M30,110 L830,110 L830,190 L30,190 Z" fill="url(#eqFill)"/>
+
+                        <!-- flat EQ line -->
+                        <line x1="30" y1="110" x2="830" y2="110" stroke="#ffffff" stroke-width="2"/>
+
+                        <!-- draggable point markers -->
+                        <circle cx="30" cy="110" r="7" fill="#ffffff"/>
+                        <circle cx="190" cy="110" r="7" fill="#ffffff"/>
+                        <circle cx="350" cy="110" r="7" fill="#ffffff"/>
+                        <circle cx="510" cy="110" r="7" fill="#ffffff"/>
+                        <circle cx="670" cy="110" r="7" fill="#ffffff"/>
+                        <circle cx="830" cy="110" r="7" fill="#ffffff"/>
+                    </svg>
+
+                    <div class="eq-freq-labels">
+                        <span>60Hz</span>
+                        <span>150Hz</span>
+                        <span>400Hz</span>
+                        <span>1KHz</span>
+                        <span>2.4KHz</span>
+                        <span>15KHz</span>
+                    </div>
+                </div>
+
+                <div class="download-app-card">
+                    <div>
+                        <h4>Fine-tune your sound with the Windows app</h4>
+                        <p>Improve streaming quality, adjust the equalizer to best fit your speakers, and enjoy consistent volume across all your tracks.</p>
+                    </div>
+                    <button class="btn-download-app">Download the free app</button>
+                </div>
+            </section>
+
+            <!-- Listening activity and insights -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">Listening activity and insights</h3>
+                <div class="settings-row" style="border-bottom:none;">
+                    <span class="settings-row-label">
+                        <strong>Listening activity on desktop and mobile</strong>
+                        People on Spotify can see the music you're playing, stats on how your tastes compare and ask to Jam.
+                    </span>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- What others can see on your profile -->
+            <section class="settings-block">
+                <h3 class="settings-block-title">What others can see on your profile</h3>
+                <div class="settings-row">
+                    <span class="settings-row-label">
+                        <strong>Followers and following</strong>
+                        On your profile, people can see who's following you and who you're following.
+                    </span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row" style="border-bottom:none;">
+                    <span class="settings-row-label">People can see the playlists you've added to your profile.</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="profile-footer">
+                <div class="profile-footer-top">
+                    <div class="profile-footer-col">
+                        <h6>Company</h6>
+                        <a href="#">About</a>
+                        <a href="#">Jobs</a>
+                        <a href="#">For the Record</a>
+                    </div>
+                    <div class="profile-footer-col">
+                        <h6>Communities</h6>
+                        <a href="#">For Artists</a>
+                        <a href="#">Developers</a>
+                        <a href="#">Advertising</a>
+                        <a href="#">Investors</a>
+                        <a href="#">Vendors</a>
+                    </div>
+                    <div class="profile-footer-col">
+                        <h6>Useful links</h6>
+                        <a href="#">Support</a>
+                        <a href="#">Free Mobile App</a>
+                        <a href="#">Popular by Country</a>
+                        <a href="#">Top Song Lyrics</a>
+                        <a href="#">Import your music</a>
+                    </div>
+                    <div class="profile-footer-col">
+                        <h6>Spotify Plans</h6>
+                        <a href="#">Premium Standard</a>
+                        <a href="#">Premium Platinum</a>
+                        <a href="#">Premium Student</a>
+                        <a href="#">Spotify Free</a>
+                    </div>
+                    <div class="profile-footer-social">
+                        <a href="#" class="social-circle"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-circle"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="social-circle"><i class="bi bi-facebook"></i></a>
+                    </div>
+                </div>
+
+                <div class="profile-footer-bottom">
+                    <div class="profile-footer-legal-links">
+                        <a href="#">Legal</a>
+                        <a href="#">Safety & Privacy Center</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">About Ads</a>
+                        <a href="#">Accessibility</a>
+                    </div>
+                    <span class="profile-footer-copyright">© 2026 Spotify AB</span>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up - Spotify</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Non-scrollable Page Base Structure */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Flex Wrapper to center content vertically & push footer to bottom */
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            padding: 40px 20px 24px 20px;
+        }
+
+        /* Phone Signup Box Wrapper */
+        .signup-mno-container {
+            width: 100%;
+            max-width: 330px;
+            margin-top: auto;
+            margin-bottom: 380px;
+        }
+
+        /* Top Back Navigation Arrow Button */
+        .back-nav-link {
+            display: inline-block;
+            color: #ffffff;
+            font-size: 1.25rem;
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: transform 0.1s ease;
+        }
+
+        .back-nav-link:hover {
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        /* Input Form Label */
+        .form-label-custom {
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+        }
+
+        /* Phone Input Group Flexbox */
+        .phone-input-wrapper {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Country Code Select Box */
+        .select-country-code {
+            background-color: #121212;
+            border: 1px solid #727272;
+            border-radius: 4px;
+            color: #ffffff;
+            width: 80px;
+            height: 48px;
+            padding: 0 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            cursor: pointer;
+        }
+
+        .select-country-code:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 1px #ffffff;
+        }
+
+        /* Phone Number Input */
+        .input-field-custom {
+            background-color: #121212;
+            border: 1px solid #727272;
+            border-radius: 4px;
+            color: #ffffff;
+            width: 100%;
+            height: 48px;
+            padding: 14px 16px;
+            font-size: 0.95rem;
+        }
+
+        .input-field-custom:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 1px #ffffff;
+        }
+
+        /* Primary Green Button */
+        .btn-spotify-primary {
+            background-color: #1ed760;
+            color: #000000;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            width: 100%;
+            height: 48px;
+            padding: 12px 0;
+            transition: transform 0.1s ease, background-color 0.1s ease;
+        }
+
+        .btn-spotify-primary:hover {
+            transform: scale(1.02);
+            background-color: #21e065;
+        }
+
+        /* Captcha Legal Terms Disclosure Footer Section */
+        .footer-captcha-terms {
+            font-size: 0.7rem;
+            color: #b3b3b3;
+            line-height: 1.5;
+            max-width: 340px;
+            text-align: center;
+        }
+
+        .footer-captcha-terms a {
+            color: #b3b3b3;
+            text-decoration: underline;
+        }
+
+
+        .input-error {
+            border: 1px solid #f15e2c !important;
+            animation: shakeInput 0.3s ease;
+        }
+
+        .error-message {
+            color: #f15e2c;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        @keyframes shakeInput {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .form-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background-color: #f15e2c;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 12px 24px;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 2000;
+        }
+
+        .form-toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="form-toast" id="formToast"></div>
+
+    <div class="page-wrapper">
+        
+        <!-- Center Phone Input Block -->
+        <div class="signup-mno-container">
+            <!-- Back Arrow Link to signup.html -->
+            <a href="signup.html" class="back-nav-link" aria-label="Go back">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+
+            <!-- Form -->
+            <form action="loggedindex.html" id="signupPhoneForm">
+                <label class="form-label-custom">Phone number</label>
+                
+                <div class="phone-input-wrapper">
+                    <select class="select-country-code">
+                        <option value="91" selected>91</option>
+                        <option value="1">1</option>
+                        <option value="44">44</option>
+                        <option value="61">61</option>
+                    </select>
+                    <input type="tel" class="input-field-custom" id="signupPhoneInput" required>
+                </div>
+                <span class="error-message" id="signupPhoneError"></span>
+
+                <button type="submit" class="btn-spotify-primary">Continue</button>
+            </form>
+
+        <!-- Sticky Bottom Legal Terms Footer -->
+        <div class="footer-captcha-terms">
+            This site is protected by reCAPTCHA and the Google 
+            <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a> apply.
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
